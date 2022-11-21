@@ -1,0 +1,45 @@
+schemaVersion: 1.0.0-alpha.1
+name: cloudcasa
+version: 3.2.0
+description: "Kubernetes data protection service"
+reference: getporter/cloudcasa
+#dockerfile: Dockerfile.tmpl
+maintainers:
+- name: "Catalogic Software"
+  email: "support@cloudcasa.io"
+  url: "https://cloudcasa.io"
+
+credentials:
+  - name: kubeconfig
+    path: /home/nitish/.kube/config
+
+parameters:
+  - name: cluster_id
+    default: ''
+    type: string
+    description: Provide cluster_id to register the K8S cluster with CloudCasa
+
+mixins:
+  - helm3:
+      repositories:
+        cloudcasa:
+          url: "https://catalogicsoftware.github.io/cloudcasa-helmchart"
+
+install:
+  - helm3:
+      description: "Register K8S cluster to CloudCasa"
+      name: cloudcasa
+      chart: cloudcasa
+      version: 3.0.0
+      set:
+        cluster_id: ${ bundle.parameters.cluster_id }
+
+uninstall:
+  - helm3:
+      description: "De-register K8S cluster to CloudCasa"
+      purge: true
+      name: cloudcasa
+      chart: cloudcasa
+      version: 3.0.0
+      set:
+        cluster_id: ${ bundle.parameters.cluster_id }
