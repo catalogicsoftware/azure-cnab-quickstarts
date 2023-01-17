@@ -48,6 +48,7 @@
 		"cnab_azure_client_id": "[parameters('cnab_azure_client_id')]",
 		"cnab_azure_client_secret": "[parameters('cnab_azure_client_secret')]",
 		"cnab_azure_location": "[resourceGroup().Location]",
+		"cnab_azure_state_fileshare": "cloudcasa",
 		"cnab_azure_state_storage_account_name": "[concat('cnabstate',uniqueString(resourceGroup().id))]",
 		"cnab_azure_subscription_id": "[subscription().subscriptionId]",
 		"cnab_azure_tenant_id": "[subscription().tenantId]",
@@ -77,12 +78,22 @@
 			}
 		},
 		{
+			"type": "Microsoft.Storage/storageAccounts/fileServices/shares",
+			"name": "[concat(variables('cnab_azure_state_storage_account_name'), '/default/', variables('cnab_azure_state_fileshare'))]",
+			"apiVersion": "2019-04-01",
+			"location": "[variables('aci_location')]",
+			"dependsOn": [
+				"[variables('cnab_azure_state_storage_account_name')]"
+			],
+			"properties": null
+		},	
+		{
 			"type": "Microsoft.ContainerInstance/containerGroups",
 			"name": "[variables('containerGroupName')]",
 			"apiVersion": "2018-10-01",
 			"location": "[variables('aci_location')]",
 			"dependsOn": [
-				"[variables('cnab_azure_state_storage_account_name')]"
+				"[resourceId('Microsoft.Storage/storageAccounts/fileServices/shares', variables('cnab_azure_state_storage_account_name'), 'default', variables('cnab_azure_state_fileshare'))]"
 			],
 			"properties": {
 				"containers": [
@@ -133,6 +144,10 @@
 									"name": "CNAB_AZURE_STATE_STORAGE_ACCOUNT_KEY",
 									"secureValue": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('cnab_azure_state_storage_account_name')), '2019-04-01').keys[0].value]"
 								},
+								{
+									"name": "CNAB_AZURE_STATE_FILESHARE",
+									"value": "[variables('cnab_azure_state_fileshare')]"
+								},								
 								{
 									"name": "VERBOSE",
 									"value": "false"
