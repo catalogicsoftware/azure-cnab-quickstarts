@@ -15,6 +15,10 @@ credentials:
     path: /home/nonroot/.kube/config
 
 parameters:
+  - name: namespace
+    type: string
+    default: default
+    description: Kubernetes namespace for installation
   - name: cluster_id
     default: ''
     type: string
