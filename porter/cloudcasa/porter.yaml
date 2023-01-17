@@ -1,0 +1,72 @@
+schemaVersion: 1.0.0-alpha.1
+name: cloudcasa
+#registry: catalogicsoftware
+registry: nitsteve99
+version: 3.2.0
+description: "Kubernetes data protection service"
+#reference: getporter/cloudcasa
+dockerfile: Dockerfile.tmpl
+maintainers:
+- name: "Catalogic Software"
+  email: "support@cloudcasa.io"
+  url: "https://cloudcasa.io"
+
+  #invocationImage: cnabquickstarts.azurecr.io/porter/airflow:0.1.0
+  #tag: cnabquickstarts.azurecr.io/porter/airflow/bundle:0.1.0
+
+credentials:
+  - name: kubeconfig
+    path: /home/nonroot/.kube/config
+
+parameters:
+  - name: cluster_id
+    default: ''
+    type: string
+    description: Provide cluster_id to register the K8S cluster with CloudCasa
+    applyTo:
+      - install
+      - upgrade
+      - uninstall
+
+mixins:
+  - exec
+  - kubernetes
+
+install:
+  - exec:
+      description: "Substituting cluster_id value to manifest"
+      command: ./helpers.sh
+      arguments:
+        - install
+        - "{{ bundle.parameters.cluster_id }}"
+  - kubernetes:
+      description: "Register the cluster with CloudCasa"
+      manifests:
+      - /cnab/app/km.yaml
+      wait: true
+
+upgrade:
+  - exec:
+      description: "Substituting cluster_id value to manifest"
+      command: ./helpers.sh
+      arguments:
+        - install
+        - "{{ bundle.parameters.cluster_id }}"
+  - kubernetes:
+      description: "Upgrade the cluster kubeagent"
+      manifests:
+      - /cnab/app/km.yaml
+      wait: true
+
+uninstall:
+  - exec:
+      description: "Substituting cluster_id value to manifest"
+      command: ./helpers.sh
+      arguments:
+        - install
+        - "{{ bundle.parameters.cluster_id }}"
+  - kubernetes:
+      description: "Unregister the cluster with CloudCasa"
+      manifests:
+      - /cnab/app/km.yaml
+      wait: true
