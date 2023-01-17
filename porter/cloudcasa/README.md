@@ -41,4 +41,3 @@ kubeconfig | Required for accessing Kubernetes cluster |  | Yes
 
 ## Known issues
 
-- ~~[Test issue - ignore](https://github.com/Azure/azure-cnab-quickstarts/issues/20)~~
