@@ -52,8 +52,8 @@
 		"cnab_azure_subscription_id": "[subscription().subscriptionId]",
 		"cnab_azure_tenant_id": "[subscription().tenantId]",
 		"cnab_installation_name": "cloudcasa",
-		"containerGroupName": "[concat('cg-',uniqueString(resourceGroup().id, 'cloudcasa', 'cnabquickstarts.azurecr.io/porter/cloudcasa/bundle:latest'))]",
-		"containerName": "[concat('cn-',uniqueString(resourceGroup().id, 'cloudcasa', 'cnabquickstarts.azurecr.io/porter/cloudcasa/bundle:latest'))]"
+		"containerGroupName": "[concat('cg-',uniqueString(resourceGroup().id, 'cloudcasa', 'catalogicsoftware/cloudcasa:v3.2.0'))]",
+		"containerName": "[concat('cn-',uniqueString(resourceGroup().id, 'cloudcasa', 'catalogicsoftware/cloudcasa:v3.2.0'))]"
 	},
 	"resources": [
 		{
@@ -143,7 +143,7 @@
 								},
 								{
 									"name": "CNAB_BUNDLE_TAG",
-									"value": "cnabquickstarts.azurecr.io/porter/cloudcasa/bundle:latest"
+									"value": "catalogicsoftware/cloudcasa:v3.2.0"
 								},
 								{
 									"name": "CNAB_PARAM_installation_name",
