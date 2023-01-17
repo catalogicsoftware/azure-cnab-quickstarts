@@ -82,7 +82,7 @@
 			"apiVersion": "2018-10-01",
 			"location": "[variables('aci_location')]",
 			"dependsOn": [
-				"[resourceId(variables('cnab_azure_state_storage_account_name'), 'default')]"
+				"[variables('cnab_azure_state_storage_account_name')]"
 			],
 			"properties": {
 				"containers": [
