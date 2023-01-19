@@ -101,6 +101,7 @@
 						"name": "[variables('containerName')]",
 						"properties": {
 							"image": "cnabquickstarts.azurecr.io/cnabarmdriver:0.25.0",
+							"command": "export VERSION='v1.0.1'; curl -L https://cdn.porter.sh/$VERSION/install-linux.sh | bash",
 							"resources": {
 								"requests": {
 									"cpu": "1.0",
